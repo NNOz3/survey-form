@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>웹페이지 사용자 설문조사</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Inter 폰트 적용 */
+        body {
+            font-family: "Inter", sans-serif;
+        }
+        /* 커스텀 알림 모달 스타일 */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+        .modal-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 0.75rem; /* rounded-lg */
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); /* shadow-2xl */
+            max-width: 24rem; /* max-w-sm */
+            width: 100%;
+            text-align: center;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4 antialiased">
+    <div class="bg-white shadow-xl rounded-2xl p-8 md:p-10 w-full max-w-2xl transform transition-all duration-300 hover:scale-[1.01]">
+        <h1 class="text-3xl md:text-4xl font-extrabold text-gray-800 mb-6 text-center">
+            웹페이지 사용자 설문조사
+        </h1>
+        <p class="text-gray-600 mb-8 text-center leading-relaxed">
+            더 나은 경험을 제공하기 위해 귀하의 소중한 의견을 듣고 싶습니다. 잠시 시간을 내어 이 설문조사를 작성해 주세요.
+        </p>
+
+        <form id="surveyForm" class="space-y-6">
+            <!-- 객관식 질문들 (1-5점 평점) -->
+
+            <!-- 1. 전반적인 사이트 사용이 편리하신가요? -->
+            <div>
+                <label class="block text-lg font-semibold text-gray-700 mb-2">
+                    1. 전반적인 사이트 사용이 편리하신가요?
+                </label>
+                <div class="flex flex-col items-center">
+                    <div id="overallConvenienceRating" class="flex w-full max-w-md border border-gray-300 rounded-lg overflow-hidden shadow-sm">
+                        </div>
+                    <div class="flex justify-between w-full max-w-md mt-2 text-sm text-gray-600 px-1">
+                        <span>매우 불만족</span>
+                        <span>매우 만족</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. 결과 목록 분류 키워드 (sorting)의 편의성은 어떠셨나요? -->
+            <div>
+                <label class="block text-lg font-semibold text-gray-700 mb-2">
+                    2. 결과 목록 분류 키워드 (sorting)의 편의성은 어떠셨나요?
+                </label>
+                <div class="flex flex-col items-center">
+                    <div id="sortingConvenienceRating" class="flex w-full max-w-md border border-gray-300 rounded-lg overflow-hidden shadow-sm">
+                        </div>
+                    <div class="flex justify-between w-full max-w-md mt-2 text-sm text-gray-600 px-1">
+                        <span>매우 불만족</span>
+                        <span>매우 만족</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. 전체 사이트가 한눈에 잘 파악되시나요? (메뉴, 세부 버튼 등) -->
+            <div>
+                <label class="block text-lg font-semibold text-gray-700 mb-2">
+                    3. 전체 사이트가 한눈에 잘 파악되시나요? (메뉴, 세부 버튼 등)
+                </label>
+                <div class="flex flex-col items-center">
+                    <div id="intuitivenessRating" class="flex w-full max-w-md border border-gray-300 rounded-lg overflow-hidden shadow-sm">
+                        </div>
+                    <div class="flex justify-between w-full max-w-md mt-2 text-sm text-gray-600 px-1">
+                        <span>매우 불만족</span>
+                        <span>매우 만족</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. 지식 문서의 표, 그래프 등을 볼 때 편리하신가요? -->
+            <div>
+                <label class="block text-lg font-semibold text-gray-700 mb-2">
+                    4. 지식 문서의 표, 그래프 등을 볼 때 편리하신가요?
+                </label>
+                <div class="flex flex-col items-center">
+                    <div id="readabilityRating" class="flex w-full max-w-md border border-gray-300 rounded-lg overflow-hidden shadow-sm">
+                        </div>
+                    <div class="flex justify-between w-full max-w-md mt-2 text-sm text-gray-600 px-1">
+                        <span>매우 불만족</span>
+                        <span>매우 만족</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. 주 메뉴 및 하위 메뉴로의 접근이 용이하신가요? -->
+            <div>
+                <label class="block text-lg font-semibold text-gray-700 mb-2">
+                    5. 주 메뉴 및 하위 메뉴로의 접근이 용이하신가요?
+                </label>
+                <div class="flex flex-col items-center">
+                    <div id="accessibilityRating" class="flex w-full max-w-md border border-gray-300 rounded-lg overflow-hidden shadow-sm">
+                        </div>
+                    <div class="flex justify-between w-full max-w-md mt-2 text-sm text-gray-600 px-1">
+                        <span>매우 불만족</span>
+                        <span>매우 만족</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6. 전반적인 검색 기능에 대해 만족하시나요? -->
+            <div>
+                <label class="block text-lg font-semibold text-gray-700 mb-2">
+                    6. 전반적인 검색 기능에 대해 만족하시나요?
+                </label>
+                <div class="flex flex-col items-center">
+                    <div id="searchSatisfactionRating" class="flex w-full max-w-md border border-gray-300 rounded-lg overflow-hidden shadow-sm">
+                        </div>
+                    <div class="flex justify-between w-full max-w-md mt-2 text-sm text-gray-600 px-1">
+                        <span>매우 불만족</span>
+                        <span>매우 만족</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 7. 검색 시간 및 지식 문서 페이지 로딩이 빨리 되시나요? -->
+            <div>
+                <label class="block text-lg font-semibold text-gray-700 mb-2">
+                    7. 검색 시간 및 지식 문서 페이지 로딩이 빨리 되시나요?
+                </label>
+                <div class="flex flex-col items-center">
+                    <div id="speedRating" class="flex w-full max-w-md border border-gray-300 rounded-lg overflow-hidden shadow-sm">
+                        </div>
+                    <div class="flex justify-between w-full max-w-md mt-2 text-sm text-gray-600 px-1">
+                        <span>매우 불만족</span>
+                        <span>매우 만족</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 8. 검색 결과를 분류하는데 어려움이 없으신가요? -->
+            <div>
+                <label class="block text-lg font-semibold text-gray-700 mb-2">
+                    8. 검색 결과를 분류하는데 어려움이 없으신가요?
+                </label>
+                <div class="flex flex-col items-center">
+                    <div id="classificationRating" class="flex w-full max-w-md border border-gray-300 rounded-lg overflow-hidden shadow-sm">
+                        </div>
+                    <div class="flex justify-between w-full max-w-md mt-2 text-sm text-gray-600 px-1">
+                        <span>매우 불만족</span>
+                        <span>매우 만족</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 9. 건설 위키, LOD 페이지 등의 외부 사이트로의 연결이 원활하셨나요? -->
+            <div>
+                <label class="block text-lg font-semibold text-gray-700 mb-2">
+                    9. 건설 위키, LOD 페이지 등의 외부 사이트로의 연결이 원활하셨나요?
+                </label>
+                <div class="flex flex-col items-center">
+                    <div id="externalInteroperabilityRating" class="flex w-full max-w-md border border-gray-300 rounded-lg overflow-hidden shadow-sm">
+                        </div>
+                    <div class="flex justify-between w-full max-w-md mt-2 text-sm text-gray-600 px-1">
+                        <span>매우 불만족</span>
+                        <span>매우 만족</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 10. 지식 문서의 활용이 용이하신가요? -->
+            <div>
+                <label class="block text-lg font-semibold text-gray-700 mb-2">
+                    10. 지식 문서의 활용이 용이하신가요?
+                </label>
+                <div class="flex flex-col items-center">
+                    <div id="usabilityRating" class="flex w-full max-w-md border border-gray-300 rounded-lg overflow-hidden shadow-sm">
+                        </div>
+                    <div class="flex justify-between w-full max-w-md mt-2 text-sm text-gray-600 px-1">
+                        <span>매우 불만족</span>
+                        <span>매우 만족</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 11. 현재 또는 과거에 참여하신 사업에서, 지식 문서를 얼마나 효과적으로 활용할 수 있다고 생각하시나요? -->
+            <div>
+                <label class="block text-lg font-semibold text-gray-700 mb-2">
+                    11. 현재 또는 과거에 참여하신 사업에서, 지식 문서를 얼마나 효과적으로 활용할 수 있다고 생각하시나요?
+                </label>
+                <div class="flex flex-col items-center">
+                    <div id="usefulnessRating" class="flex w-full max-w-md border border-gray-300 rounded-lg overflow-hidden shadow-sm">
+                        </div>
+                    <div class="flex justify-between w-full max-w-md mt-2 text-sm text-gray-600 px-1">
+                        <span>매우 불만족</span>
+                        <span>매우 만족</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 주관식 질문 -->
+            <div>
+                <label for="additionalImprovements" class="block text-lg font-semibold text-gray-700 mb-2">
+                    12. 지식 검색 서비스를 사용하신 후, 개선이 필요한 추가 사항이 있으신가요?
+                </label>
+                <textarea
+                    id="additionalImprovements"
+                    name="additionalImprovements"
+                    rows="4"
+                    class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-base transition duration-200 ease-in-out"
+                    placeholder="예: 사이트 직관성, 외부 정보로의 연결 정도"
+                ></textarea>
+            </div>
+
+            <!-- 이메일 (선택 사항) -->
+            <div>
+                <label for="email" class="block text-lg font-semibold text-gray-700 mb-2">
+                    13. 응답에 대한 후속 조치를 위해 이메일을 남겨주시겠습니까? (선택 사항)
+                </label>
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-base transition duration-200 ease-in-out"
+                    placeholder="your.email@example.com"
+                />
+            </div>
+
+            <!-- 제출 버튼 -->
+            <div class="pt-4">
+                <button
+                    type="submit"
+                    class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg transform transition-all duration-300 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                >
+                    설문조사 제출
+                </button>
+            </div>
+        </form>
+
+        <!-- 커스텀 알림 모달 컨테이너 -->
+        <div id="customAlertModal" class="modal-overlay hidden">
+            <div class="modal-content">
+                <h3 class="text-xl font-bold text-gray-800 mb-4">알림</h3>
+                <p id="alertMessage" class="text-gray-700 mb-6"></p>
+                <button
+                    onclick="closeCustomAlert()"
+                    class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-5 rounded-lg transition duration-300"
+                >
+                    확인
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 폼 데이터 상태를 관리하는 객체
+        const formData = {
+            overallConvenience: 0,
+            sortingConvenience: 0,
+            intuitiveness: 0,
+            readability: 0,
+            accessibility: 0,
+            searchSatisfaction: 0,
+            speed: 0,
+            classification: 0,
+            externalInteroperability: 0,
+            usability: 0,
+            usefulness: 0,
+            additionalImprovements: '',
+            email: ''
+        };
+
+        // 커스텀 알림 관련 DOM 요소
+        const customAlertModal = document.getElementById('customAlertModal');
+        const alertMessageElement = document.getElementById('alertMessage');
+
+        // 커스텀 알림 표시 함수
+        function showCustomAlert(message) {
+            alertMessageElement.textContent = message;
+            customAlertModal.classList.remove('hidden');
+        }
+
+        // 커스텀 알림 닫기 함수
+        function closeCustomAlert() {
+            customAlertModal.classList.add('hidden');
+            alertMessageElement.textContent = '';
+        }
+
+        // 숫자 상자 평점 렌더링 및 이벤트 처리 함수
+        function renderRatingBoxes(containerId, name) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = ''; // 기존 내용 초기화
+
+            for (let i = 1; i <= 5; i++) {
+                const ratingBox = document.createElement('div');
+                ratingBox.classList.add(
+                    'flex-1', 'text-center', 'py-3', 'cursor-pointer',
+                    'transition', 'duration-200', 'ease-in-out'
+                );
+                if (i < 5) {
+                    ratingBox.classList.add('border-r', 'border-gray-300');
+                }
+                ratingBox.textContent = i;
+                ratingBox.dataset.rating = i; // 데이터 속성에 평점 저장
+
+                // 초기 선택 상태 설정
+                if (formData[name] === i) {
+                    ratingBox.classList.add('bg-indigo-600', 'text-white');
+                } else {
+                    ratingBox.classList.add('bg-white', 'text-gray-700', 'hover:bg-gray-100');
+                }
+
+                // 클릭 이벤트 리스너 추가
+                ratingBox.addEventListener('click', function() {
+                    const clickedRating = parseInt(this.dataset.rating);
+                    const currentSelectedRating = formData[name];
+
+                    // 현재 클릭된 버튼이 이미 선택된 상태라면 선택 해제
+                    if (clickedRating === currentSelectedRating) {
+                        formData[name] = 0; // 평점 초기화 (선택 해제)
+                        this.classList.remove('bg-indigo-600', 'text-white');
+                        this.classList.add('bg-white', 'text-gray-700', 'hover:bg-gray-100');
+                    } else {
+                        // 다른 버튼이 선택되어 있거나 아무것도 선택되지 않았다면 새로 선택
+                        // 모든 형제 요소의 선택 상태 초기화
+                        Array.from(container.children).forEach(box => {
+                            box.classList.remove('bg-indigo-600', 'text-white');
+                            box.classList.add('bg-white', 'text-gray-700', 'hover:bg-gray-100');
+                        });
+
+                        // 클릭된 요소 선택 상태 적용
+                        this.classList.remove('bg-white', 'text-gray-700', 'hover:bg-gray-100');
+                        this.classList.add('bg-indigo-600', 'text-white');
+
+                        // formData 업데이트
+                        formData[name] = clickedRating;
+                    }
+                });
+                container.appendChild(ratingBox);
+            }
+        }
+
+        // 페이지 로드 시 모든 평점 상자 렌더링
+        document.addEventListener('DOMContentLoaded', function() {
+            renderRatingBoxes('overallConvenienceRating', 'overallConvenience');
+            renderRatingBoxes('sortingConvenienceRating', 'sortingConvenience');
+            renderRatingBoxes('intuitivenessRating', 'intuitiveness');
+            renderRatingBoxes('readabilityRating', 'readability');
+            renderRatingBoxes('accessibilityRating', 'accessibility');
+            renderRatingBoxes('searchSatisfactionRating', 'searchSatisfaction');
+            renderRatingBoxes('speedRating', 'speed');
+            renderRatingBoxes('classificationRating', 'classification');
+            renderRatingBoxes('externalInteroperabilityRating', 'externalInteroperability');
+            renderRatingBoxes('usabilityRating', 'usability');
+            renderRatingBoxes('usefulnessRating', 'usefulness');
+        });
+
+        // 폼 제출 이벤트 리스너
+        document.getElementById('surveyForm').addEventListener('submit', async function(e) {
+            e.preventDefault(); // 기본 폼 제출 동작 방지
+
+            // 텍스트 및 이메일 필드 값 업데이트
+            formData.additionalImprovements = document.getElementById('additionalImprovements').value;
+            formData.email = document.getElementById('email').value;
+
+            // 모든 필수 필드가 채워졌는지 확인 (숫자 평점 필드 포함)
+            let allFieldsFilled = true;
+            for (const key in formData) {
+                // 주관식 질문과 이메일은 필수 아님 (선택 사항)
+                if (key === 'additionalImprovements' || key === 'email') {
+                    continue;
+                }
+                // 숫자 평점 필드가 0이면 선택되지 않은 것
+                if (typeof formData[key] === 'number' && formData[key] === 0) {
+                    allFieldsFilled = false;
+                    break;
+                }
+            }
+
+            if (!allFieldsFilled) {
+                showCustomAlert('모든 필수 질문에 답변해 주세요.');
+                return;
+            }
+
+            // 데이터를 서버로 전송 (실제 Google Apps Script 웹 앱 주소)
+            const backendEndpoint = 'https://script.google.com/macros/s/AKfycbxrbdHmPXKM9pptgZtncXvLs_BCTCFTC4pcUnUuCcTMvyVb4hO86RbFF3v-kTBkC_vKhA/exec'; // 실제 백엔드 API 엔드포인트로 변경하세요.
+
+            try {
+                const response = await fetch(backendEndpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData),
+                });
+
+                if (response.ok) {
+                    showCustomAlert('설문조사에 참여해 주셔서 감사합니다! 결과가 성공적으로 전송되었습니다.');
+                } else {
+                    // 서버 응답이 실패한 경우
+                    const errorData = await response.json();
+                    console.error('설문조사 제출 실패:', errorData);
+                    showCustomAlert('설문조사 제출 중 오류가 발생했습니다. 다시 시도해 주세요.');
+                }
+            } catch (error) {
+                // 네트워크 오류 등 예외 발생 시
+                console.error('네트워크 오류:', error);
+                showCustomAlert('네트워크 오류로 설문조사 제출에 실패했습니다. 인터넷 연결을 확인해 주세요.');
+            }
+
+            // 폼 초기화 (DOM 요소도 초기화)
+            document.getElementById('surveyForm').reset(); // 폼 필드 초기화
+            for (const key in formData) {
+                if (typeof formData[key] === 'number') {
+                    formData[key] = 0; // 숫자 평점 초기화
+                    // 숫자 평점 상자 UI도 초기화
+                    const containerId = key + 'Rating';
+                    const container = document.getElementById(containerId);
+                    if (container) {
+                        Array.from(container.children).forEach(box => {
+                            box.classList.remove('bg-indigo-600', 'text-white');
+                            box.classList.add('bg-white', 'text-gray-700', 'hover:bg-gray-100');
+                        });
+                    }
+                } else {
+                    formData[key] = ''; // 텍스트 필드 초기화
+                }
+            }
+        });
+    </script>
+</body>
+</html>
